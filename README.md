@@ -80,7 +80,7 @@ The Leaderboard, running as an online platform, presents users as well as their 
 
 In order to run this project you need:
 
-- GitHub
+- Git
 - Any text editor
 - To install linters and webpack
 
