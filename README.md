@@ -55,10 +55,10 @@ The Leaderboard, running as an online platform, presents users as well as their 
 
 ### Key Features <a name="key-features"></a>
 
-- **[Display user and their scores]**
-- **[Work With API]**
-- **[Use callbacks and promises]**
-- **[Use webpack to bundle JavaScript]**
+- **Display user and their scores**
+- **Work With API**
+- **Use callbacks and promises**
+- **Use webpack to bundle JavaScript**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
