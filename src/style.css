@@ -56,9 +56,24 @@ button {
   box-shadow: 3px 3px 5px #0c3c77;
 }
 
-table {
+.scores-container {
   width: 100%;
   border: 2px solid #0c3c77;
-  background-color: #85b8cc;
   border-collapse: collapse;
+  display: none;
+}
+
+.scores-container p:nth-child(odd) {
+  background-color: #85b8cc;
+}
+
+.scores-container p:nth-child(even) {
+  background-color: #718de7;
+}
+
+.error-msg {
+  color: red;
+  display: none;
+  text-align: center;
+  margin-top: 10px;
 }
