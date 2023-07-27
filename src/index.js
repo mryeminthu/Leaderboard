@@ -35,17 +35,23 @@ submitForm.addEventListener('submit', async (event) => {
     return;
   }
 
-  await addScore(chessGameId, name, score);
-  nameInput.value = '';
-  scoreInput.value = '';
+  try {
+    await addScore(chessGameId, name, score);
 
-  errorMsg.style.display = 'none';
-  scoresContainer.style.display = 'block';
+    nameInput.value = '';
+    scoreInput.value = '';
 
-  submittedScores.push({ user: name, score });
+    errorMsg.style.display = 'none';
+    scoresContainer.style.display = 'block';
 
-  storeScores(submittedScores);
-  refreshScores(submittedScores);
+    const newScore = { user: name, score };
+    submittedScores.push(newScore);
+
+    storeScores(submittedScores);
+    refreshScores(submittedScores);
+  } catch (error) {
+    // Handle the error
+  }
 });
 
 refreshButton.addEventListener('click', async () => {
