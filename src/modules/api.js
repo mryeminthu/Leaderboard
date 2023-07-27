@@ -27,5 +27,5 @@ export const addScore = async (gameId, user, score) => {
 export const getScores = async (gameId) => {
   const response = await fetch(`${BASE_URL}/games/${gameId}/scores/`);
   const data = await response.json();
-  return data.result;
+  return data;
 };

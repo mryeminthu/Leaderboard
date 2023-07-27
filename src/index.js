@@ -1,6 +1,6 @@
 import './style.css';
-import { createGame, addScore } from './modules/api.js';
-import { getRecentScores, storeScores } from './modules/localstorage.js';
+import { createGame, addScore, getScores } from './modules/api.js';
+import { storeScores } from './modules/localstorage.js';
 
 const submitForm = document.querySelector('.add_score');
 const refreshButton = document.querySelector('.refresh button');
@@ -10,62 +10,68 @@ const errorMsg = document.querySelector('.error-msg');
 let chessGameId;
 let submittedScores = [];
 
-(async function leaderboardApp() {
-  async function refreshScores(scoresArray) {
-    scoresContainer.innerHTML = '';
+function refreshScores(scoresArray) {
+  scoresContainer.innerHTML = '';
 
-    scoresArray.sort((a, b) => b.score - a.score);
+  scoresArray.sort((a, b) => b.score - a.score);
 
-    scoresArray.forEach((scoreObj) => {
-      const scoreElement = document.createElement('p');
-      scoreElement.textContent = `${scoreObj.user}: ${scoreObj.score}`;
-      scoresContainer.appendChild(scoreElement);
-    });
+  scoresArray.forEach((scoreObj) => {
+    const scoreElement = document.createElement('p');
+    scoreElement.textContent = `${scoreObj.user}: ${scoreObj.score}`;
+    scoresContainer.appendChild(scoreElement);
+  });
+}
+
+submitForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const nameInput = document.querySelector("input[placeholder='Your name']");
+  const scoreInput = document.querySelector("input[placeholder='Your score']");
+
+  const name = nameInput.value.trim();
+  const score = parseInt(scoreInput.value, 10);
+
+  if (!name || !score) {
+    errorMsg.style.display = 'block';
+    return;
   }
 
-  submitForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const nameInput = document.querySelector("input[placeholder='Your name']");
-    const scoreInput = document.querySelector("input[placeholder='Your score']");
+  await addScore(chessGameId, name, score);
+  nameInput.value = '';
+  scoreInput.value = '';
 
-    const name = nameInput.value.trim();
-    const score = parseInt(scoreInput.value, 10);
+  errorMsg.style.display = 'none';
+  scoresContainer.style.display = 'block';
 
-    if (!name || !score) {
-      errorMsg.style.display = 'block';
-      return;
-    }
+  submittedScores.push({ user: name, score });
 
-    await addScore(chessGameId, name, score);
-    nameInput.value = '';
-    scoreInput.value = '';
+  storeScores(submittedScores);
+  refreshScores(submittedScores);
+});
 
-    errorMsg.style.display = 'none';
-    scoresContainer.style.display = 'block';
+refreshButton.addEventListener('click', async () => {
+  errorMsg.style.display = 'none';
+  scoresContainer.style.display = 'block';
 
-    submittedScores.push({ user: name, score });
-
-    storeScores(submittedScores);
-    refreshScores(submittedScores);
-  });
-
-  refreshButton.addEventListener('click', () => {
-    errorMsg.style.display = 'none';
-    scoresContainer.style.display = 'block';
-
-    submittedScores = getRecentScores();
+  try {
+    const scoresData = await getScores(chessGameId);
+    submittedScores = scoresData.result || [];
 
     refreshScores(submittedScores);
-  });
+  } catch (error) {
+    // Handle the error
+  }
+});
 
-  async function initializeChessGame() {
-    const chessGameName = 'Chess Game';
-    chessGameId = await createGame(chessGameName);
+(async function initialize() {
+  const chessGameName = 'Chess Game';
+  chessGameId = await createGame(chessGameName);
 
-    submittedScores = getRecentScores();
-
-    refreshScores(submittedScores);
+  try {
+    const scoresData = await getScores(chessGameId);
+    submittedScores = scoresData.result || [];
+  } catch (error) {
+    // Handle the error
   }
 
-  initializeChessGame();
+  refreshScores(submittedScores);
 }());
