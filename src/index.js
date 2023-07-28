@@ -1,13 +1,12 @@
 import './style.css';
 import { createGame, addScore, getScores } from './modules/api.js';
-import { storeScores } from './modules/localstorage.js';
 
 const submitForm = document.querySelector('.add_score');
 const refreshButton = document.querySelector('.refresh button');
 const scoresContainer = document.querySelector('.scores-container');
 const errorMsg = document.querySelector('.error-msg');
 
-let chessGameId;
+let chessGameId = localStorage.getItem('chessGameId');
 let submittedScores = [];
 
 function refreshScores(scoresArray) {
@@ -22,7 +21,7 @@ function refreshScores(scoresArray) {
   });
 }
 
-async function handleSubmit(event) {
+submitForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   const nameInput = document.querySelector("input[placeholder='Your name']");
   const scoreInput = document.querySelector("input[placeholder='Your score']");
@@ -35,26 +34,15 @@ async function handleSubmit(event) {
     return;
   }
 
-  try {
-    await addScore(chessGameId, name, score);
+  await addScore(chessGameId, name, score);
+  nameInput.value = '';
+  scoreInput.value = '';
 
-    nameInput.value = '';
-    scoreInput.value = '';
+  errorMsg.style.display = 'none';
+  scoresContainer.style.display = 'block';
 
-    errorMsg.style.display = 'none';
-    scoresContainer.style.display = 'block';
-
-    const newScore = { user: name, score };
-    submittedScores.push(newScore);
-
-    storeScores(submittedScores);
-    refreshScores(submittedScores);
-  } catch (error) {
-    // Handle the error
-  }
-}
-
-submitForm.addEventListener('submit', handleSubmit);
+  // Do not automatically refresh after submitting
+});
 
 refreshButton.addEventListener('click', async () => {
   errorMsg.style.display = 'none';
@@ -71,8 +59,11 @@ refreshButton.addEventListener('click', async () => {
 });
 
 (async function initialize() {
-  const chessGameName = 'Chess Game';
-  chessGameId = await createGame(chessGameName);
+  if (!chessGameId) {
+    const chessGameName = 'Chess Game';
+    chessGameId = await createGame(chessGameName);
+    localStorage.setItem('chessGameId', chessGameId);
+  }
 
   try {
     const scoresData = await getScores(chessGameId);
