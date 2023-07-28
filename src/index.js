@@ -22,7 +22,7 @@ function refreshScores(scoresArray) {
   });
 }
 
-submitForm.addEventListener('submit', async (event) => {
+async function handleSubmit(event) {
   event.preventDefault();
   const nameInput = document.querySelector("input[placeholder='Your name']");
   const scoreInput = document.querySelector("input[placeholder='Your score']");
@@ -52,7 +52,9 @@ submitForm.addEventListener('submit', async (event) => {
   } catch (error) {
     // Handle the error
   }
-});
+}
+
+submitForm.addEventListener('submit', handleSubmit);
 
 refreshButton.addEventListener('click', async () => {
   errorMsg.style.display = 'none';
