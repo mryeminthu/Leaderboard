@@ -56,11 +56,19 @@ button {
   box-shadow: 3px 3px 5px #0c3c77;
 }
 
+button:hover {
+  cursor: pointer;
+  color: #0c3c77;
+  background-color: #fff;
+}
+
 .scores-container {
   width: 100%;
   border: 2px solid #0c3c77;
   border-collapse: collapse;
   display: none;
+  padding: 15px;
+  border-radius: 0.5em;
 }
 
 .scores-container p:nth-child(odd) {
@@ -71,9 +79,33 @@ button {
   background-color: #718de7;
 }
 
+.sect_two {
+  width: 25%;
+}
+
+.add_score {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}
+
 .error-msg {
   color: red;
   display: none;
   text-align: center;
   margin-top: 10px;
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  background-color: #0c3c77;
+  color: #fff;
+  font-size: 1.5em;
+  font-weight: 600;
+  padding: 0.8em 0 0.8em;
+  justify-content: center;
 }
