@@ -17,6 +17,9 @@ function refreshScores(scoresArray) {
   scoresArray.forEach((scoreObj) => {
     const scoreElement = document.createElement('p');
     scoreElement.textContent = `${scoreObj.user}: ${scoreObj.score}`;
+    scoreElement.style.padding = '10px';
+    scoreElement.style.fontSize = '0.9em';
+    scoreElement.style.borderRadius = '0.5em';
     scoresContainer.appendChild(scoreElement);
   });
 }
@@ -40,8 +43,6 @@ submitForm.addEventListener('submit', async (event) => {
 
   errorMsg.style.display = 'none';
   scoresContainer.style.display = 'block';
-
-  // Do not automatically refresh after submitting
 });
 
 refreshButton.addEventListener('click', async () => {
