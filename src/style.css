@@ -110,3 +110,18 @@ footer {
   padding: 0.8em 0 0.8em;
   justify-content: center;
 }
+
+@media screen and (max-width: 768px) {
+  .score {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sect_one {
+    width: 100%;
+  }
+
+  .sect_two {
+    width: 100%;
+  }
+}
